@@ -1,6 +1,6 @@
 '''
 
-This script is not optimized  for large amount of data use it wisely.
+This script is not optimized  for large amount of data, use it wisely.
 
 This was for made for short, simple, personal use and not for large scaled applications 
 
@@ -17,6 +17,7 @@ import pandas as pd
 processed_list = []
 files_to_be_processed = []
 path = ""
+csv_path_for_excel = ""
 total_files = 0
 skipped_files = 0
 
@@ -36,7 +37,7 @@ def AskfilePath():
             title="No Folder Selected",
             message="No folder path was selected. The program will exit."
         )
-        sys.exit()
+        # sys.exit()
 
 #Validation Check
 def valid_check(filepath):
@@ -82,8 +83,9 @@ def load_existing_names(csv_path):
     return existing
 
 def batch_processor(file_list):
+    global csv_path_for_excel
     csv_path = os.path.join(path, "1Extracted_details.csv")
-    csv_to_excel(csv_path)
+    csv_path_for_excel  = csv_path
     existing = load_existing_names(csv_path)
 
     new_files = [f for f in file_list if f.replace(".jhd", "") not in existing]
@@ -93,8 +95,7 @@ def batch_processor(file_list):
             title="No New Records",
             message="All .jhd files were already processed. Nothing new to extract."
         )
-        sys.exit()
-
+        # sys.exit()
     for file in new_files:
         Data_extractor(file)
 
@@ -117,23 +118,25 @@ def Data_extractor(file):
 def csv_to_excel(csv_path):
     excel_path = os.path.splitext(csv_path)[0] + ".xlsx"
     df = pd.read_csv(csv_path)
+    # Sort by name
+    df.sort_values("Name", inplace=True)
     df.to_excel(excel_path, index=False)
 
-def export_to_csv(data, file_path):
-    file_exists = os.path.exists(file_path)
+def export_to_csv(data, csv_path):
+    file_exists = os.path.exists(csv_path)
 
     header = ["Name", "Month", "Day", "Year", "Time", "Timezone", "Longitude", "Latitude", 
               "Value1", "Value2", "Value3", "Value4", "Value5", "City_Name", "Country",
               "Value6", "Atmospheric pressure", "Temperature", "Gender"]
 
-    with open(file_path, "a", newline="", encoding="utf-8") as f:
+    with open(csv_path, "a", newline="", encoding="utf-8") as f:
         writer = csv.writer(f)
 
         if not file_exists:
             writer.writerow(header)
 
         writer.writerows(data)
-    
+
     messagebox.showinfo(
         title="Done",
         message=f"Processed {len(data)} new files. Appended to existing CSV."
@@ -145,4 +148,5 @@ AskfilePath()
 valid_check(path)
 # file_preview(path)
 batch_processor(files_to_be_processed)
+csv_to_excel(csv_path_for_excel)
 sys.exit()
