@@ -23,7 +23,7 @@ This tool provides a minimal **GUI interface** to select a folder, validates the
 1. You select a folder that contains your `.jhd` files.  
 2. The script checks and filters only valid `.jhd` files.  
 3. Each file is read and parsed — data is cleaned and stored.  
-4. A file named **`1Extracted_details.csv`** is created in the same folder.  
+4. A file named**`1Extracted_details.csv`** and **`1Extracted_details.Excel`** is created in the same folder.  
 5. A popup confirms successful extraction with summary details.
 6. You can directly use **`JhoraDataExtractor.exe`** `.exe` file directly on your system instead of setting up python and other libraries 
 
