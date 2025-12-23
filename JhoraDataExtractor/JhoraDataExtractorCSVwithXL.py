@@ -37,7 +37,7 @@ def AskfilePath():
             title="No Folder Selected",
             message="No folder path was selected. The program will exit."
         )
-        # sys.exit()
+        sys.exit()
 
 #Validation Check
 def valid_check(filepath):
